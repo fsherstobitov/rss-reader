@@ -3,6 +3,7 @@ package ru.unatco.rss.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import ru.unatco.rss.R;
+import ru.unatco.rss.adapters.FeedAdapter;
 import ru.unatco.rss.model.Item;
 import ru.unatco.rss.model.Subscription;
 import ru.unatco.rss.presenters.FeedPresenter;
@@ -87,6 +89,7 @@ public class FeedActivity extends AppCompatActivity implements FeedPresenter.Fee
 
     @Override
     public void onFetchSuccess(List<Item> items) {
+        mListView.setAdapter(new FeedAdapter(LayoutInflater.from(getApplicationContext()), items));
         mListView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
