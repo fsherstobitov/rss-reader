@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ public class FeedPresenter {
 
     public FeedPresenter(RequestQueue queue) {
         mQueue = queue;
+        mItemsCache = new HashMap<>();
     }
 
     public void setListener(FeedListener listener) {
@@ -85,17 +87,17 @@ public class FeedPresenter {
         parser.nextTag();
         List<Item> items = new ArrayList<>();
         while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() == XmlPullParser.START_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
-            if (name.equals("item")) {
+            if ("item".equals(name)) {
                 items.add(parseItem(parser));
             } else {
                 skip(parser);
             }
         }
-        return null;
+        return items;
     }
 
     private Item parseItem(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -103,13 +105,13 @@ public class FeedPresenter {
         String description = null;
 
         while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() == XmlPullParser.START_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
-            if (name.equals("title")) {
+            if ("title".equals(name)) {
                 title = parseText(parser);
-            } else if (name.equals("description")) {
+            } else if ("description".equals(name)) {
                 description = parseText(parser);
             } else {
                 skip(parser);
