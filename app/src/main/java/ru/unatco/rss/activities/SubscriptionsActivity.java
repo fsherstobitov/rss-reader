@@ -9,9 +9,14 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import ru.unatco.rss.R;
+import ru.unatco.rss.adapters.SubscriptionsAdapter;
+import ru.unatco.rss.model.Subscription;
 
 
 public class SubscriptionsActivity extends AppCompatActivity {
@@ -31,6 +36,19 @@ public class SubscriptionsActivity extends AppCompatActivity {
 
         mListView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Subscription sub = new Subscription();
+        sub.setmTitle("Радио-Т");
+        sub.setmUrl("http://feeds.rucast.net/radio-t");
+        List<Subscription> subs = new ArrayList<>();
+        subs.add(sub);
+        mListView.setAdapter(new SubscriptionsAdapter(getApplicationContext(), subs));
+        mListView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
