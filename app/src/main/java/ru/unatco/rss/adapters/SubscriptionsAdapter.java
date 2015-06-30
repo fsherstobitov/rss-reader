@@ -52,11 +52,11 @@ public class SubscriptionsAdapter extends BaseAdapter {
 
         Subscription sub = getItem(i);
         holder.mTitle.setText(sub.getmTitle());
-        
+
         return view;
     }
 
-    private static class ViewHolder {
+    public static class ViewHolder {
         @Bind(R.id.title)
         TextView mTitle;
 
