@@ -2,18 +2,35 @@ package ru.unatco.rss.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ru.unatco.rss.R;
 
 
 public class SubscriptionsActivity extends AppCompatActivity {
 
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(android.R.id.list)
+    ListView mListView;
+    @Bind(android.R.id.progress)
+    ProgressBar mProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscriptions);
+        ButterKnife.bind(this);
+
+        mListView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
