@@ -9,13 +9,22 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.android.volley.toolbox.Volley;
+
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import ru.unatco.rss.R;
+import ru.unatco.rss.model.Item;
+import ru.unatco.rss.model.Subscription;
+import ru.unatco.rss.presenters.FeedPresenter;
 
-public class FeedActivity extends AppCompatActivity {
+public class FeedActivity extends AppCompatActivity implements FeedPresenter.FeedListener {
 
     public static final String ARG_SUB = "ru.unatco.rss.Subscription";
+
+    private static FeedPresenter mPresenter;
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -36,11 +45,22 @@ public class FeedActivity extends AppCompatActivity {
 
         mListView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
+
+        mPresenter = new FeedPresenter(Volley.newRequestQueue(getApplicationContext()));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mPresenter.setListener(this);
+        Subscription sub = getIntent().getParcelableExtra(ARG_SUB);
+        mPresenter.fetchItems(sub.getmUrl());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPresenter.clearListener();
     }
 
     @Override
@@ -63,5 +83,16 @@ public class FeedActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFetchSuccess(List<Item> items) {
+        mListView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onFetchError(Throwable error) {
+
     }
 }
