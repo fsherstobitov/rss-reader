@@ -1,11 +1,13 @@
 package ru.unatco.rss.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -34,6 +36,15 @@ public class SubscriptionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_subscriptions);
         ButterKnife.bind(this);
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Subscription sub = (Subscription) adapterView.getAdapter().getItem(i);
+                Intent intent = new Intent(SubscriptionsActivity.this, FeedActivity.class);
+                intent.putExtra(FeedActivity.ARG_SUB, sub);
+                startActivity(intent);
+            }
+        });
         mListView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
     }
