@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.unatco.rss" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -22,6 +22,14 @@
             android:name=".activities.FeedActivity"
             android:label="@string/title_activity_feed"
             android:parentActivityName=".activities.SubscriptionsActivity" >
+        </activity>
+        <activity
+            android:name=".activities.ItemActivity"
+            android:label="@string/title_activity_item"
+            android:parentActivityName=".activities.FeedActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ru.unatco.rss.activities.FeedActivity" />
         </activity>
     </application>
 
