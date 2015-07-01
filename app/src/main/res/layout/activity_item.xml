@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"/>
 
-    <WebView
-        android:id="@+id/web_view"
+    <TextView
+        android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

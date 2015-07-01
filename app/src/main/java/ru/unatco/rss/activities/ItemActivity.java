@@ -3,9 +3,11 @@ package ru.unatco.rss.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -18,8 +20,8 @@ public class ItemActivity extends AppCompatActivity {
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.web_view)
-    WebView mWebView;
+    @Bind(R.id.description)
+    TextView mDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class ItemActivity extends AppCompatActivity {
 
         Item item = getIntent().getParcelableExtra(ARG_ITEM);
         getSupportActionBar().setTitle(item.getmTitle());
-        mWebView.loadData(item.getmDescription(), null, null);
+        mDescription.setText(Html.fromHtml(item.getmDescription()));
     }
 
     @Override
