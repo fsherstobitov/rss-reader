@@ -85,6 +85,7 @@ public class FeedPresenter {
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(new StringReader(response));
         parser.nextTag();
+        parser.nextTag();
         List<Item> items = new ArrayList<>();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -125,8 +126,11 @@ public class FeedPresenter {
     }
 
     private String parseText(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String text = parser.getText();
-        parser.nextTag();
+        String text = "";
+        if (parser.next() == XmlPullParser.TEXT) {
+            text = parser.getText();
+            parser.nextTag();
+        }
         return text;
     }
 
