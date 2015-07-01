@@ -1,5 +1,6 @@
 package ru.unatco.rss.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -45,6 +47,15 @@ public class FeedActivity extends AppCompatActivity implements FeedPresenter.Fee
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Item item = (Item) adapterView.getAdapter().getItem(i);
+                Intent intent = new Intent(FeedActivity.this, ItemActivity.class);
+                intent.putExtra(ItemActivity.ARG_ITEM, item);
+                startActivity(intent);
+            }
+        });
         mListView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
 
