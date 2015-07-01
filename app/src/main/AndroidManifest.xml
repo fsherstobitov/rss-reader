@@ -20,7 +20,8 @@
         </activity>
         <activity
             android:name=".activities.FeedActivity"
-            android:label="@string/title_activity_feed" >
+            android:label="@string/title_activity_feed"
+            android:parentActivityName=".activities.SubscriptionsActivity" >
         </activity>
     </application>
 
