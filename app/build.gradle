@@ -30,4 +30,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.0'
     compile 'com.mcxiaoke.volley:library:1.0.+'
     compile 'org.simpleframework:simple-xml:2.7.1'
+    compile 'com.pushtorefresh.storio:sqlite:1.0.0'
 }
