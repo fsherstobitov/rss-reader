@@ -29,6 +29,11 @@ public class Item implements Parcelable {
         mDescription = in.readString();
     }
 
+    public Item(String title, String description) {
+        mTitle = title;
+        mDescription = description;
+    }
+
     public String getmTitle() {
         return mTitle;
     }
