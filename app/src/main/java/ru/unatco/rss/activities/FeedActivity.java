@@ -72,8 +72,13 @@ public class FeedActivity extends AppCompatActivity implements FeedPresenter.Fee
         super.onResume();
         mPresenter.setListener(this);
         Subscription sub = getIntent().getParcelableExtra(ARG_SUB);
-        getSupportActionBar().setTitle(sub.getmTitle());
-        mPresenter.fetchItems(sub.getmUrl());
+        if (sub != null) {
+            getSupportActionBar().setTitle(sub.getmTitle());
+            mPresenter.setSubscription(sub);
+        } else {
+            getSupportActionBar().setTitle(mPresenter.getSubscription().getmTitle());
+        }
+        mPresenter.fetchItems();
     }
 
     @Override

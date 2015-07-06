@@ -17,6 +17,7 @@ import java.util.Map;
 
 import ru.unatco.rss.data.Feed;
 import ru.unatco.rss.model.Item;
+import ru.unatco.rss.model.Subscription;
 
 public class FeedPresenter {
 
@@ -29,6 +30,7 @@ public class FeedPresenter {
     private final RequestQueue mQeueu;
 
     private FeedListener mListener;
+    private Subscription mSubscription;
     private Map<String, List<Item>> mItemsCache;
 
     public FeedPresenter(RequestQueue queue) {
@@ -44,11 +46,22 @@ public class FeedPresenter {
         mListener = null;
     }
 
-    public void fetchItems(String url) {
-        if (mItemsCache.containsKey(url) && mListener != null) {
-            mListener.onFetchSuccess(mItemsCache.get(url));
+    public Subscription getSubscription() {
+        return mSubscription;
+    }
+
+    public void setSubscription(Subscription mSubscription) {
+        this.mSubscription = mSubscription;
+    }
+
+    public void fetchItems() {
+        if (mSubscription == null) {
+            throw new IllegalStateException("Subscription is not set. You have to call setSubscription() first");
+        }
+        if (mItemsCache.containsKey(mSubscription.getmUrl()) && mListener != null) {
+            mListener.onFetchSuccess(mItemsCache.get(mSubscription.getmUrl()));
         } else {
-            doFetchItems(url);
+            doFetchItems(mSubscription.getmUrl());
         }
     }
 
