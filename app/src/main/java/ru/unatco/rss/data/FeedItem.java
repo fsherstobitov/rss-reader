@@ -7,9 +7,9 @@ import ru.unatco.rss.model.Item;
 
 @Root(name = "item", strict = false)
 public class FeedItem {
-    @Element(name = "title")
+    @Element(name = "title", required = false)
     private String mTitle;
-    @Element(name = "description")
+    @Element(name = "description", required = false)
     private String mDescription;
 
     public String getTitle() {
