@@ -1,27 +1,21 @@
 package ru.unatco.rss.presenters;
 
-import android.net.Uri;
-import android.util.Xml;
+import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-import retrofit.converter.SimpleXMLConverter;
 import ru.unatco.rss.data.Feed;
-import ru.unatco.rss.data.RssService;
 import ru.unatco.rss.model.Item;
 
 public class FeedPresenter {
@@ -32,10 +26,13 @@ public class FeedPresenter {
         void onFetchError(Throwable error);
     }
 
+    private final RequestQueue mQeueu;
+
     private FeedListener mListener;
     private Map<String, List<Item>> mItemsCache;
 
-    public FeedPresenter() {
+    public FeedPresenter(RequestQueue queue) {
+        mQeueu = queue;
         mItemsCache = new HashMap<>();
     }
 
@@ -56,26 +53,28 @@ public class FeedPresenter {
     }
 
     private void doFetchItems(final String url) {
-        Uri uri = Uri.parse(url);
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(uri.getScheme() + "://" + uri.getHost())
-                .setConverter(new SimpleXMLConverter())
-                .build();
-
-        String path = uri.getPath().startsWith("/") ? uri.getPath().substring(1) : uri.getPath();
-
-        RssService rssService = restAdapter.create(RssService.class);
-        rssService.getItems(path, new Callback<Feed>() {
-            @Override
-            public void success(Feed feed, Response response) {
-                mItemsCache.put(url, feed.getmChannel().getItems());
-                mListener.onFetchSuccess(mItemsCache.get(url));
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                mListener.onFetchError(error);
-            }
-        });
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Serializer serializer = new Persister();
+                        try {
+                            Feed feed = serializer.read(Feed.class, response);
+                            mItemsCache.put(url, feed.getmChannel().getItems());
+                            mListener.onFetchSuccess(mItemsCache.get(url));
+                        } catch (Exception e) {
+                            Log.d("FeedPresenter", e.getMessage());
+                            mListener.onFetchError(e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("FeedPresenter", error.getMessage());
+                        mListener.onFetchError(error);
+                    }
+                });
+        mQeueu.add(request);
     }
 }

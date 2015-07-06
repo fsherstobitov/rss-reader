@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.Volley;
 
@@ -36,6 +37,8 @@ public class FeedActivity extends AppCompatActivity implements FeedPresenter.Fee
     ListView mListView;
     @Bind(android.R.id.progress)
     ProgressBar mProgressBar;
+    @Bind(R.id.error_message)
+    TextView mErrorMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,7 @@ public class FeedActivity extends AppCompatActivity implements FeedPresenter.Fee
         mProgressBar.setVisibility(View.VISIBLE);
 
         if (mPresenter == null) {
-            mPresenter = new FeedPresenter();
+            mPresenter = new FeedPresenter(Volley.newRequestQueue(getApplicationContext()));
         }
     }
 
@@ -106,10 +109,13 @@ public class FeedActivity extends AppCompatActivity implements FeedPresenter.Fee
         mListView.setAdapter(new FeedAdapter(LayoutInflater.from(getApplicationContext()), items));
         mListView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
+        mErrorMessage.setVisibility(View.GONE);
     }
 
     @Override
     public void onFetchError(Throwable error) {
-
+        mListView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+        mErrorMessage.setVisibility(View.VISIBLE);
     }
 }
