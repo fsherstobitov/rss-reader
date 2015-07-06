@@ -27,6 +27,15 @@
             android:layout_gravity="center"
             android:indeterminate="true"/>
 
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Произошла ошибка"
+            android:textSize="18sp"
+            android:visibility="gone"/>
+
     </FrameLayout>
 
 </LinearLayout>
