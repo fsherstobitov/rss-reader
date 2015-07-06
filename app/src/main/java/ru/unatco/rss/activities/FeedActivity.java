@@ -60,7 +60,7 @@ public class FeedActivity extends AppCompatActivity implements FeedPresenter.Fee
         mProgressBar.setVisibility(View.VISIBLE);
 
         if (mPresenter == null) {
-            mPresenter = new FeedPresenter(Volley.newRequestQueue(getApplicationContext()));
+            mPresenter = new FeedPresenter();
         }
     }
 
