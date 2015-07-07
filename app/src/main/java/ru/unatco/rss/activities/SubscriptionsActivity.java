@@ -18,10 +18,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import ru.unatco.rss.R;
 import ru.unatco.rss.adapters.SubscriptionsAdapter;
+import ru.unatco.rss.data.local.RssDataStore;
+import ru.unatco.rss.data.local.RssDatabaseHelper;
 import ru.unatco.rss.model.Subscription;
 
 
 public class SubscriptionsActivity extends AppCompatActivity {
+
+    private RssDataStore mDataStore;
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -47,17 +51,14 @@ public class SubscriptionsActivity extends AppCompatActivity {
         });
         mListView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
+
+        mDataStore = new RssDataStore(new RssDatabaseHelper(this));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Subscription sub = new Subscription();
-        sub.setmTitle("Радио-Т");
-        sub.setmUrl("http://feeds.rucast.net/radio-t");
-        List<Subscription> subs = new ArrayList<>();
-        subs.add(sub);
-        mListView.setAdapter(new SubscriptionsAdapter(getApplicationContext(), subs));
+        mListView.setAdapter(new SubscriptionsAdapter(getApplicationContext(), mDataStore.getSubscriptions()));
         mListView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
