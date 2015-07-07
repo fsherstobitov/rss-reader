@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import ru.unatco.rss.data.Feed;
+import ru.unatco.rss.data.local.RssDataStore;
 import ru.unatco.rss.model.Item;
 import ru.unatco.rss.model.Subscription;
 
@@ -27,13 +28,15 @@ public class FeedPresenter {
         void onFetchError(Throwable error);
     }
 
+    private final RssDataStore mDataStore;
     private final RequestQueue mQeueu;
 
     private FeedListener mListener;
     private Subscription mSubscription;
     private Map<String, List<Item>> mItemsCache;
 
-    public FeedPresenter(RequestQueue queue) {
+    public FeedPresenter(RssDataStore dataStore, RequestQueue queue) {
+        mDataStore = dataStore;
         mQeueu = queue;
         mItemsCache = new HashMap<>();
     }
@@ -58,11 +61,8 @@ public class FeedPresenter {
         if (mSubscription == null) {
             throw new IllegalStateException("Subscription is not set. You have to call setSubscription() first");
         }
-        if (mItemsCache.containsKey(mSubscription.getmUrl()) && mListener != null) {
-            mListener.onFetchSuccess(mItemsCache.get(mSubscription.getmUrl()));
-        } else {
-            doFetchItems(mSubscription.getmUrl());
-        }
+        mListener.onFetchSuccess(mDataStore.getItems(mSubscription));
+        doFetchItems(mSubscription.getmUrl());
     }
 
     private void doFetchItems(final String url) {
@@ -73,8 +73,10 @@ public class FeedPresenter {
                         Serializer serializer = new Persister();
                         try {
                             Feed feed = serializer.read(Feed.class, response);
-                            mItemsCache.put(url, feed.getmChannel().getItems());
-                            mListener.onFetchSuccess(mItemsCache.get(url));
+                            for (Item item : feed.getmChannel().getItems()) {
+                                mDataStore.putItem(mSubscription, item);
+                            }
+                            mListener.onFetchSuccess(mDataStore.getItems(mSubscription));
                         } catch (Exception e) {
                             Log.d("FeedPresenter", e.getMessage());
                             mListener.onFetchError(e);

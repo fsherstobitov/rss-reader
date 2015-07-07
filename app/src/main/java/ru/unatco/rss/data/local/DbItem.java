@@ -5,14 +5,12 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 @StorIOSQLiteType(table = "items")
 public class DbItem {
-    @StorIOSQLiteColumn(name = "_id", key = true)
-    Long mId;
-    @StorIOSQLiteColumn(name = "title")
+    @StorIOSQLiteColumn(name = "title", key = true)
     String mTitle;
     @StorIOSQLiteColumn(name = "description")
     String mDescription;
-    @StorIOSQLiteColumn(name = "sub_id")
-    Long mSubId;
+    @StorIOSQLiteColumn(name = "sub_url")
+    String mSubUrl;
 
     DbItem() {
     }

@@ -17,7 +17,6 @@ public class Item implements Parcelable {
         }
     };
 
-    private long mId;
     private String mTitle;
     private String mDescription;
 
@@ -26,23 +25,13 @@ public class Item implements Parcelable {
     }
 
     public Item(Parcel in) {
-        mId = in.readLong();
         mTitle = in.readString();
         mDescription = in.readString();
     }
 
-    public Item(long id, String title, String description) {
-        mId = id;
+    public Item(String title, String description) {
         mTitle = title;
         mDescription = description;
-    }
-
-    public long getId() {
-        return mId;
-    }
-
-    public void setId(long id) {
-        this.mId = id;
     }
 
     public String getmTitle() {
@@ -68,7 +57,6 @@ public class Item implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel out, int i) {
-        out.writeLong(mId);
         out.writeString(mTitle);
         out.writeString(mDescription);
     }

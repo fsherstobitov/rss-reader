@@ -17,24 +17,14 @@ public class Subscription implements Parcelable {
         }
     };
 
-    private long mId;
     private String mTitle;
     private String mUrl;
 
     public Subscription() {}
 
     public Subscription(Parcel in) {
-        mId = in.readLong();
         mTitle = in.readString();
         mUrl = in.readString();
-    }
-
-    public long getmId() {
-        return mId;
-    }
-
-    public void setmId(long mId) {
-        this.mId = mId;
     }
 
     public String getmTitle() {
@@ -60,7 +50,6 @@ public class Subscription implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel out, int i) {
-        out.writeLong(mId);
         out.writeString(mTitle);
         out.writeString(mUrl);
     }

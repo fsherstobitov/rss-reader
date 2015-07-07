@@ -56,7 +56,6 @@ public class RssDataStore {
         List<Subscription> subs = new ArrayList<>(dbSubs.size());
         for (DbSubscription dbSub : dbSubs) {
             Subscription s = new Subscription();
-            s.setmId(dbSub.mId);
             s.setmTitle(dbSub.mTitle);
             s.setmUrl(dbSub.mUrl);
             subs.add(s);
@@ -65,31 +64,31 @@ public class RssDataStore {
     }
 
     public void putItem(Subscription sub, Item item) {
-        if (sub.getmId() < 1) {
-            throw new IllegalArgumentException("Subscription.id == 0");
+        if (sub.getmUrl() == null) {
+            throw new IllegalArgumentException("Subscription.url == null");
         }
         DbItem dbItem = new DbItem();
-        dbItem.mId = item.getId();
         dbItem.mTitle = item.getmTitle();
         dbItem.mDescription = item.getmDescription();
-        dbItem.mSubId = sub.getmId();
+        dbItem.mSubUrl = sub.getmUrl();
 
         mIo.put().object(dbItem).prepare().executeAsBlocking();
     }
 
-    public List<Item> getItems(long subId) {
+    public List<Item> getItems(Subscription sub) {
         List<DbItem> dbItems = mIo.get()
                 .listOfObjects(DbItem.class)
                 .withQuery(Query.builder()
                         .table("items")
-                        .where("sub_id=" + subId)
+                        .where("sub_url=?")
+                        .whereArgs(sub.getmUrl())
                         .build())
                 .prepare()
                 .executeAsBlocking();
 
         List<Item> items = new ArrayList<>(dbItems.size());
         for (DbItem dbItem : dbItems) {
-            Item item = new Item(dbItem.mId, dbItem.mTitle, dbItem.mDescription);
+            Item item = new Item(dbItem.mTitle, dbItem.mDescription);
             items.add(item);
         }
 

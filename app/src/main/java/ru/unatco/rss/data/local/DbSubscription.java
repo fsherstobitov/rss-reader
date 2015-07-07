@@ -5,11 +5,9 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 @StorIOSQLiteType(table = "subscriptions")
 public class DbSubscription {
-    @StorIOSQLiteColumn(name = "_id", key = true)
-    Long mId;
     @StorIOSQLiteColumn(name = "title")
     String mTitle;
-    @StorIOSQLiteColumn(name = "url")
+    @StorIOSQLiteColumn(name = "url", key = true)
     String mUrl;
 
     DbSubscription() {}

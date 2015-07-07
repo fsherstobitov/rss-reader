@@ -15,8 +15,8 @@ public class RssDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table subscriptions (_id integer primary key autoincrement, title text, url text)");
-        sqLiteDatabase.execSQL("create table items (_id integer primary key autoincrement, title text, description text, sub_id integer references subscriptions(_id))");
+        sqLiteDatabase.execSQL("create table subscriptions (title text, url text primary key not null)");
+        sqLiteDatabase.execSQL("create table items (title text primary key not null, description text, sub_url text references subscriptions(url))");
 
         sqLiteDatabase.execSQL("insert into subscriptions (title, url) values ('Радио-Т', 'http://feeds.rucast.net/radio-t')");
     }

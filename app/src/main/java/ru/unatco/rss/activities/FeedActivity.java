@@ -1,5 +1,6 @@
 package ru.unatco.rss.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import ru.unatco.rss.R;
 import ru.unatco.rss.adapters.FeedAdapter;
+import ru.unatco.rss.data.local.RssDataStore;
+import ru.unatco.rss.data.local.RssDatabaseHelper;
 import ru.unatco.rss.model.Item;
 import ru.unatco.rss.model.Subscription;
 import ru.unatco.rss.presenters.FeedPresenter;
@@ -63,7 +66,8 @@ public class FeedActivity extends AppCompatActivity implements FeedPresenter.Fee
         mProgressBar.setVisibility(View.VISIBLE);
 
         if (mPresenter == null) {
-            mPresenter = new FeedPresenter(Volley.newRequestQueue(getApplicationContext()));
+            Context appContext = getApplicationContext();
+            mPresenter = new FeedPresenter(new RssDataStore(new RssDatabaseHelper(appContext)), Volley.newRequestQueue(appContext));
         }
     }
 
