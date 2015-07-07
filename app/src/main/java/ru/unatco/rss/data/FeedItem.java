@@ -21,6 +21,6 @@ public class FeedItem {
     }
 
     public Item toItem() {
-        return new Item(mTitle, mDescription);
+        return new Item(0, mTitle, mDescription);
     }
 }
