@@ -8,6 +8,7 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.unatco.rss.model.Item;
 import ru.unatco.rss.model.Subscription;
 
 public class RssDataStore {
@@ -61,5 +62,37 @@ public class RssDataStore {
             subs.add(s);
         }
         return subs;
+    }
+
+    public void putItem(Subscription sub, Item item) {
+        if (sub.getmId() < 1) {
+            throw new IllegalArgumentException("Subscription.id == 0");
+        }
+        DbItem dbItem = new DbItem();
+        dbItem.mId = item.getId();
+        dbItem.mTitle = item.getmTitle();
+        dbItem.mDescription = item.getmDescription();
+        dbItem.mSubId = sub.getmId();
+
+        mIo.put().object(dbItem).prepare().executeAsBlocking();
+    }
+
+    public List<Item> getItems(long subId) {
+        List<DbItem> dbItems = mIo.get()
+                .listOfObjects(DbItem.class)
+                .withQuery(Query.builder()
+                        .table("items")
+                        .where("sub_id=" + subId)
+                        .build())
+                .prepare()
+                .executeAsBlocking();
+
+        List<Item> items = new ArrayList<>(dbItems.size());
+        for (DbItem dbItem : dbItems) {
+            Item item = new Item(dbItem.mId, dbItem.mTitle, dbItem.mDescription);
+            items.add(item);
+        }
+
+        return items;
     }
 }
